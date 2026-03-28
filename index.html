@@ -3,397 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATOTA | LGS Test Platformu</title>
+    <title>MATOTA | Kısa Bir Mola</title>
+    <!-- Tailwind CSS (Hızlı ve modern tasarım için) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        /* Arka plan için özel animasyonlar */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
         
-        /* Özel Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .animate-blob {
+            animation: blob 7s infinite alternate;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9; 
+        
+        .animation-delay-2000 {
+            animation-delay: 2s;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
+        
+        .animation-delay-4000 {
+            animation-delay: 4s;
         }
 
-        /* Seçenek Butonları Animasyonu */
-        .option-btn {
-            transition: all 0.2s ease;
+        /* Cam karta hafif bir süzülme efekti */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
-        .option-btn.selected {
-            background-color: #eef2ff;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 2px #6366f1;
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
         }
-        .option-letter {
-            transition: all 0.2s ease;
+
+        /* Çark dönüş animasyonu */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        .option-btn.selected .option-letter {
-            background-color: #6366f1;
-            color: white;
-            border-color: #6366f1;
+        
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+        .animate-spin-slow-reverse {
+            animation: spin-slow 10s linear infinite reverse;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen overflow-hidden flex flex-col">
+<body class="bg-slate-950 font-sans text-slate-100 overflow-hidden selection:bg-indigo-500 selection:text-white">
 
-    <!-- Üst Menü (Navbar) -->
-    <header class="bg-white border-b border-slate-200 shadow-sm z-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showDashboard()">
-                <!-- Logo -->
-                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">
-                    M
-                </div>
-                <span class="font-extrabold text-xl tracking-wide text-slate-800">MATOTA<span class="text-indigo-500">LGS</span></span>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2 text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">
-                    <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                    <span>Hedef: Galatasaray Lisesi</span>
-                </div>
-                <button class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Öğrenci" class="w-full h-full object-cover">
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- ANA İÇERİK ALANI -->
-    <div class="flex-1 overflow-y-auto relative" id="main-container">
-        
-        <!-- 1. GÖRÜNÜM: KONTROL PANELİ (DERS SEÇİMİ) -->
-        <main id="dashboard-view" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 block animate-fade-in">
-            
-            <!-- Karşılama ve İstatistikler -->
-            <div class="mb-10">
-                <h1 class="text-3xl font-bold text-slate-800 mb-2">Merhaba, Ali! 👋</h1>
-                <p class="text-slate-500">LGS maratonunda bugün hangi dersi çalışmak istersin?</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                    <!-- İstatistik Kartı 1 -->
-                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
-                        <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-slate-500">Bugün Çözülen Soru</p>
-                            <p class="text-2xl font-bold text-slate-800">124</p>
-                        </div>
-                    </div>
-                    <!-- İstatistik Kartı 2 -->
-                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-slate-500">Doğru Oranı</p>
-                            <p class="text-2xl font-bold text-slate-800">%85</p>
-                        </div>
-                    </div>
-                    <!-- İstatistik Kartı 3 -->
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 shadow-md text-white flex flex-col justify-center relative overflow-hidden">
-                        <div class="relative z-10">
-                            <p class="text-sm font-medium text-indigo-100 mb-1">LGS'ye Kalan Süre</p>
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold">84</span>
-                                <span class="text-indigo-100">Gün</span>
-                            </div>
-                        </div>
-                        <!-- Dekoratif Arkaplan -->
-                        <svg class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm1-8h4v2h-6V7h2v5z"></path></svg>
-                    </div>
-                </div>
-            </div>
-
-            <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                Ders Seçimi
-            </h2>
-            
-            <!-- Dersler Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Türkçe -->
-                <div onclick="startTest('Türkçe', 20, 'text-rose-500')" class="group bg-white rounded-3xl p-6 border border-slate-200 hover:border-rose-400 hover:shadow-lg transition-all duration-300 cursor-pointer relative overflow-hidden">
-                    <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800">Türkçe</h3>
-                    <p class="text-sm text-slate-500 mt-1">Sözcükte Anlam, Paragraf, Dilbilgisi</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">20 Soru</span>
-                        <div class="text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Matematik -->
-                <div onclick="startTest('Matematik', 20, 'text-blue-500')" class="group bg-white rounded-3xl p-6 border border-slate-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800">Matematik</h3>
-                    <p class="text-sm text-slate-500 mt-1">Üslü İfadeler, Köklü Sayılar, Veri Analizi</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">20 Soru</span>
-                        <div class="text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Fen Bilimleri -->
-                <div onclick="startTest('Fen Bilimleri', 20, 'text-emerald-500')" class="group bg-white rounded-3xl p-6 border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <div class="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800">Fen Bilimleri</h3>
-                    <p class="text-sm text-slate-500 mt-1">Mevsimler, DNA, Basınç, Madde</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">20 Soru</span>
-                        <div class="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- İnkılap Tarihi -->
-                <div onclick="startTest('İnkılap Tarihi', 10, 'text-orange-500')" class="group bg-white rounded-3xl p-6 border border-slate-200 hover:border-orange-400 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <div class="w-14 h-14 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800">T.C. İnkılap Tarihi</h3>
-                    <p class="text-sm text-slate-500 mt-1">Bir Kahraman Doğuyor, Milli Uyanış</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">10 Soru</span>
-                        <div class="text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- İngilizce -->
-                <div onclick="startTest('İngilizce', 10, 'text-purple-500')" class="group bg-white rounded-3xl p-6 border border-slate-200 hover:border-purple-400 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <div class="w-14 h-14 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800">İngilizce</h3>
-                    <p class="text-sm text-slate-500 mt-1">Friendship, Teen Life, Cooking</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">10 Soru</span>
-                        <div class="text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Din Kültürü -->
-                <div onclick="startTest('Din Kültürü', 10, 'text-teal-500')" class="group bg-white rounded-3xl p-6 border border-slate-200 hover:border-teal-400 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <div class="w-14 h-14 bg-teal-50 text-teal-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800">Din Kültürü</h3>
-                    <p class="text-sm text-slate-500 mt-1">Kader İnancı, Zekat ve Sadaka</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">10 Soru</span>
-                        <div class="text-teal-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-12 text-center text-slate-400 text-sm pb-8">
-                LGS Deneme Sınavları çok yakında MATOTA'da!
-            </div>
-        </main>
-
-        <!-- 2. GÖRÜNÜM: SORU ÇÖZÜM EKRANI -->
-        <main id="test-view" class="hidden absolute inset-0 bg-slate-50 flex flex-col h-full z-10 animate-fade-in">
-            
-            <!-- Test Üst Bilgi Barı -->
-            <div class="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-4">
-                    <button onclick="showDashboard()" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    </button>
-                    <div>
-                        <h2 id="test-subject-title" class="text-lg font-bold text-slate-800 leading-tight">Matematik Testi</h2>
-                        <div class="text-xs font-medium text-slate-500">Soru <span id="current-q-num" class="text-indigo-600">1</span> / <span id="total-q-num">20</span></div>
-                    </div>
-                </div>
-                
-                <!-- Sayaç -->
-                <div class="flex items-center gap-2 bg-slate-100 px-4 py-1.5 rounded-full border border-slate-200">
-                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span id="timer" class="font-mono font-bold text-slate-700">40:00</span>
-                </div>
-                
-                <button onclick="finishTest()" class="hidden sm:block px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                    Testi Bitir
-                </button>
-            </div>
-
-            <!-- İlerleme Çubuğu -->
-            <div class="h-1.5 w-full bg-slate-200 shrink-0">
-                <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-300" style="width: 5%;"></div>
-            </div>
-
-            <!-- Soru ve Seçenekler Alanı (Scroll edilebilir) -->
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex justify-center">
-                <div class="max-w-3xl w-full">
-                    
-                    <!-- Soru Kartı -->
-                    <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-md">YENİ NESİL SORU</span>
-                            <button class="text-slate-400 hover:text-amber-500 transition-colors" title="Soruyu Kaydet">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-                            </button>
-                        </div>
-                        
-                        <!-- Örnek Soru Metni -->
-                        <div class="prose max-w-none text-slate-700 text-base sm:text-lg leading-relaxed">
-                            <p class="mb-4">Bir fabrikada üretilen ürünlerin paketlenmesi için A ve B marka iki farklı makine kullanılmaktadır.</p>
-                            <ul class="list-disc pl-5 mb-4 space-y-2">
-                                <li>A makinesi her <strong class="text-slate-900">12 saniyede</strong> 1 ürün paketlemektedir.</li>
-                                <li>B makinesi ise her <strong class="text-slate-900">15 saniyede</strong> 1 ürün paketlemektedir.</li>
-                            </ul>
-                            <p class="font-semibold text-slate-900 mb-6">İki makine aynı anda çalıştırıldıktan sonra ilk kez tekrar aynı anda ürün paketlediklerinde, A makinesi B makinesinden kaç adet fazla ürün paketlemiş olur?</p>
-                        </div>
-                        
-                        <!-- Soru Görseli (Placeholder) -->
-                        <!-- <div class="w-full h-48 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400 mb-6">
-                            [Görsel Alanı]
-                        </div> -->
-                    </div>
-
-                    <!-- Seçenekler -->
-                    <div class="grid grid-cols-1 gap-3 sm:gap-4 mb-20">
-                        <button onclick="selectOption(this)" class="option-btn text-left bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-300 flex items-center gap-4 cursor-pointer">
-                            <div class="option-letter w-8 h-8 rounded-lg border-2 border-slate-200 flex items-center justify-center font-bold text-slate-500 shrink-0">A</div>
-                            <span class="text-slate-700 font-medium">1</span>
-                        </button>
-                        <button onclick="selectOption(this)" class="option-btn text-left bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-300 flex items-center gap-4 cursor-pointer">
-                            <div class="option-letter w-8 h-8 rounded-lg border-2 border-slate-200 flex items-center justify-center font-bold text-slate-500 shrink-0">B</div>
-                            <span class="text-slate-700 font-medium">2</span>
-                        </button>
-                        <button onclick="selectOption(this)" class="option-btn text-left bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-300 flex items-center gap-4 cursor-pointer">
-                            <div class="option-letter w-8 h-8 rounded-lg border-2 border-slate-200 flex items-center justify-center font-bold text-slate-500 shrink-0">C</div>
-                            <span class="text-slate-700 font-medium">4</span>
-                        </button>
-                        <button onclick="selectOption(this)" class="option-btn text-left bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-300 flex items-center gap-4 cursor-pointer">
-                            <div class="option-letter w-8 h-8 rounded-lg border-2 border-slate-200 flex items-center justify-center font-bold text-slate-500 shrink-0">D</div>
-                            <span class="text-slate-700 font-medium">5</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Alt Kontrol Barı (Sabit) -->
-            <div class="bg-white border-t border-slate-200 p-4 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-                <div class="max-w-3xl mx-auto flex items-center justify-between">
-                    <button class="px-5 py-2.5 rounded-lg text-slate-600 font-medium hover:bg-slate-100 flex items-center gap-2 transition-colors border border-slate-200 bg-white">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                        Önceki Soru
-                    </button>
-                    
-                    <button class="sm:hidden px-4 py-2 text-rose-500 font-medium text-sm">Testi Bitir</button>
-                    
-                    <button class="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 shadow-sm flex items-center gap-2 transition-colors">
-                        Sonraki Soru
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </main>
-        
+    <!-- Animasyonlu Arka Plan Şekilleri -->
+    <div class="fixed inset-0 w-full h-full z-0 flex items-center justify-center pointer-events-none">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
     </div>
 
-    <script>
-        // Basit Yönlendirme ve UI Mantığı
-        const dashboardView = document.getElementById('dashboard-view');
-        const testView = document.getElementById('test-view');
+    <!-- Ana İçerik Konteyneri -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
         
-        // Test Başlatma
-        function startTest(subjectName, totalQuestions, colorClass) {
-            // Arayüzü güncelle
-            document.getElementById('test-subject-title').textContent = subjectName + ' Testi';
-            document.getElementById('total-q-num').textContent = totalQuestions;
-            document.getElementById('current-q-num').className = colorClass;
+        <!-- Glassmorphism Kartı -->
+        <div class="relative w-full max-w-2xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-14 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] animate-float flex flex-col items-center text-center">
             
-            // Seçimleri temizle
-            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            <!-- Logo / Marka -->
+            <div class="mb-8">
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                    MATOTA
+                </h1>
+                <div class="h-1 w-1/2 mx-auto bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full mt-2 opacity-50"></div>
+            </div>
+
+            <!-- İkonlar (Animasyonlu Çarklar) -->
+            <div class="relative w-24 h-24 mb-8 flex items-center justify-center">
+                <!-- Büyük Çark -->
+                <svg class="absolute w-16 h-16 text-indigo-400 animate-spin-slow opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <!-- Küçük Çark -->
+                <svg class="absolute w-10 h-10 text-cyan-400 animate-spin-slow-reverse transform translate-x-6 -translate-y-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </div>
+
+            <!-- Başlık ve Açıklama -->
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-white">
+                Şu Anda Bakımdayız
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
+                Sizlere daha muazzam ve kesintisiz bir deneyim sunmak için sistemlerimizi güncelliyoruz. Çok yakında daha güçlü bir şekilde geri döneceğiz. Sabrınız için teşekkür ederiz.
+            </p>
+
+            <!-- Durum Bildirgesi -->
+            <div class="flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md mb-8">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                </span>
+                <span class="text-sm font-medium text-amber-200/90 tracking-wide uppercase">Sistem Güncelleniyor</span>
+            </div>
+
+            <!-- İletişim Butonu -->
+            <a href="mailto:iletisim@matota.com" class="group relative px-6 py-3 font-semibold text-white rounded-xl overflow-hidden bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                <span class="relative z-10 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    Bize Ulaşın
+                </span>
+                <div class="absolute inset-0 h-full w-0 bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-300 ease-out group-hover:w-full z-0 opacity-50"></div>
+            </a>
             
-            // Görünüm Değiştir
-            dashboardView.classList.add('hidden');
-            testView.classList.remove('hidden');
-            
-            // Sayac başlat (Örnek)
-            startTimer(40 * 60); // 40 dakika
-        }
+        </div>
 
-        // Kontrol Paneline Dön
-        function showDashboard() {
-            testView.classList.add('hidden');
-            dashboardView.classList.remove('hidden');
-            clearInterval(timerInterval);
-        }
+        <!-- Alt Bilgi (Footer) -->
+        <p class="mt-8 text-slate-500 text-sm z-10">
+            &copy; <script>document.write(new Date().getFullYear())</script> MATOTA. Tüm hakları saklıdır.
+        </p>
+    </div>
 
-        // Testi Bitir
-        function finishTest() {
-            if(confirm('Testi bitirmek istediğinize emin misiniz?')) {
-                showDashboard();
-                alert('Test sonuçlarınız başarıyla kaydedildi! (Bu bir demo arayüzüdür)');
-            }
-        }
-
-        // Seçenek İşaretleme
-        function selectOption(clickedBtn) {
-            // Önceki seçimleri kaldır
-            const options = document.querySelectorAll('.option-btn');
-            options.forEach(btn => btn.classList.remove('selected'));
-            
-            // Yenisini ekle
-            clickedBtn.classList.add('selected');
-        }
-
-        // Basit Geri Sayım Sayacı
-        let timerInterval;
-        function startTimer(duration) {
-            clearInterval(timerInterval);
-            let timer = duration, minutes, seconds;
-            const display = document.getElementById('timer');
-            
-            timerInterval = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    display.textContent = "Süre Bitti";
-                    display.classList.add('text-rose-500');
-                }
-            }, 1000);
-        }
-    </script>
 </body>
 </html>
