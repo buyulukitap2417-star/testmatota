@@ -1,127 +1,277 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATOTA | Kısa Bir Mola</title>
-    <!-- Tailwind CSS (Hızlı ve modern tasarım için) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Arka plan için özel animasyonlar */
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        
-        .animate-blob {
-            animation: blob 7s infinite alternate;
-        }
-        
-        .animation-delay-2000 {
-            animation-delay: 2s;
-        }
-        
-        .animation-delay-4000 {
-            animation-delay: 4s;
-        }
-
-        /* Cam karta hafif bir süzülme efekti */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* Çark dönüş animasyonu */
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        .animate-spin-slow {
-            animation: spin-slow 8s linear infinite;
-        }
-        .animate-spin-slow-reverse {
-            animation: spin-slow 10s linear infinite reverse;
-        }
-    </style>
-</head>
-<body class="bg-slate-950 font-sans text-slate-100 overflow-hidden selection:bg-indigo-500 selection:text-white">
-
-    <!-- Animasyonlu Arka Plan Şekilleri -->
-    <div class="fixed inset-0 w-full h-full z-0 flex items-center justify-center pointer-events-none">
-        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
-    </div>
-
-    <!-- Ana İçerik Konteyneri -->
-    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
-        
-        <!-- Glassmorphism Kartı -->
-        <div class="relative w-full max-w-2xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-14 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] animate-float flex flex-col items-center text-center">
-            
-            <!-- Logo / Marka -->
-            <div class="mb-8">
-                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
-                    MATOTA
-                </h1>
-                <div class="h-1 w-1/2 mx-auto bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full mt-2 opacity-50"></div>
-            </div>
-
-            <!-- İkonlar (Animasyonlu Çarklar) -->
-            <div class="relative w-24 h-24 mb-8 flex items-center justify-center">
-                <!-- Büyük Çark -->
-                <svg class="absolute w-16 h-16 text-indigo-400 animate-spin-slow opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <!-- Küçük Çark -->
-                <svg class="absolute w-10 h-10 text-cyan-400 animate-spin-slow-reverse transform translate-x-6 -translate-y-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-            </div>
-
-            <!-- Başlık ve Açıklama -->
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-white">
-                Şu Anda Bakımdayız
-            </h2>
-            <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
-                Sizlere daha muazzam ve kesintisiz bir deneyim sunmak için sistemlerimizi güncelliyoruz. Çok yakında daha güçlü bir şekilde geri döneceğiz. Sabrınız için teşekkür ederiz.
-            </p>
-
-            <!-- Durum Bildirgesi -->
-            <div class="flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md mb-8">
-                <span class="relative flex h-3 w-3">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-                </span>
-                <span class="text-sm font-medium text-amber-200/90 tracking-wide uppercase">Sistem Güncelleniyor</span>
-            </div>
-
-            <!-- İletişim Butonu -->
-            <a href="mailto:iletisim@matota.com" class="group relative px-6 py-3 font-semibold text-white rounded-xl overflow-hidden bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300">
-                <span class="relative z-10 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    Bize Ulaşın
-                </span>
-                <div class="absolute inset-0 h-full w-0 bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-300 ease-out group-hover:w-full z-0 opacity-50"></div>
-            </a>
-            
-        </div>
-
-        <!-- Alt Bilgi (Footer) -->
-        <p class="mt-8 text-slate-500 text-sm z-10">
-            &copy; <script>document.write(new Date().getFullYear())</script> MATOTA. Tüm hakları saklıdır.
-        </p>
-    </div>
-
-</body>
-</html>
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/index.html b/index.html
+index 434e795f42d123d9245c229c6e7a87a70630abc7..5b94c1fbceeff6bb272ceb1b9b43535126885418 100644
+--- a/index.html
++++ b/index.html
+@@ -1,127 +1,150 @@
+ <!DOCTYPE html>
+ <html lang="tr">
+ <head>
+-    <meta charset="UTF-8">
+-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>MATOTA | Kısa Bir Mola</title>
+-    <!-- Tailwind CSS (Hızlı ve modern tasarım için) -->
+-    <script src="https://cdn.tailwindcss.com"></script>
+-    <style>
+-        /* Arka plan için özel animasyonlar */
+-        @keyframes blob {
+-            0% { transform: translate(0px, 0px) scale(1); }
+-            33% { transform: translate(30px, -50px) scale(1.1); }
+-            66% { transform: translate(-20px, 20px) scale(0.9); }
+-            100% { transform: translate(0px, 0px) scale(1); }
+-        }
+-        
+-        .animate-blob {
+-            animation: blob 7s infinite alternate;
+-        }
+-        
+-        .animation-delay-2000 {
+-            animation-delay: 2s;
+-        }
+-        
+-        .animation-delay-4000 {
+-            animation-delay: 4s;
+-        }
+-
+-        /* Cam karta hafif bir süzülme efekti */
+-        @keyframes float {
+-            0% { transform: translateY(0px); }
+-            50% { transform: translateY(-10px); }
+-            100% { transform: translateY(0px); }
+-        }
+-
+-        .animate-float {
+-            animation: float 6s ease-in-out infinite;
+-        }
+-
+-        /* Çark dönüş animasyonu */
+-        @keyframes spin-slow {
+-            from { transform: rotate(0deg); }
+-            to { transform: rotate(360deg); }
+-        }
+-        
+-        .animate-spin-slow {
+-            animation: spin-slow 8s linear infinite;
+-        }
+-        .animate-spin-slow-reverse {
+-            animation: spin-slow 10s linear infinite reverse;
+-        }
+-    </style>
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <title>MATOTA | Online Eğitim Platformu</title>
++  <script src="https://cdn.tailwindcss.com"></script>
+ </head>
+-<body class="bg-slate-950 font-sans text-slate-100 overflow-hidden selection:bg-indigo-500 selection:text-white">
+-
+-    <!-- Animasyonlu Arka Plan Şekilleri -->
+-    <div class="fixed inset-0 w-full h-full z-0 flex items-center justify-center pointer-events-none">
+-        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+-        <div class="absolute top-0 -right-4 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+-        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
++<body class="bg-slate-100 text-slate-800 min-h-screen">
++  <header class="bg-slate-900 text-white px-6 py-4 shadow">
++    <div class="max-w-7xl mx-auto flex items-center justify-between">
++      <h1 class="text-xl md:text-2xl font-bold tracking-wide">MATOTA Online Eğitim</h1>
++      <span id="dbStatus" class="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-200">DB bağlanıyor...</span>
+     </div>
++  </header>
+ 
+-    <!-- Ana İçerik Konteyneri -->
+-    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+-        
+-        <!-- Glassmorphism Kartı -->
+-        <div class="relative w-full max-w-2xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-14 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] animate-float flex flex-col items-center text-center">
+-            
+-            <!-- Logo / Marka -->
+-            <div class="mb-8">
+-                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+-                    MATOTA
+-                </h1>
+-                <div class="h-1 w-1/2 mx-auto bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full mt-2 opacity-50"></div>
+-            </div>
+-
+-            <!-- İkonlar (Animasyonlu Çarklar) -->
+-            <div class="relative w-24 h-24 mb-8 flex items-center justify-center">
+-                <!-- Büyük Çark -->
+-                <svg class="absolute w-16 h-16 text-indigo-400 animate-spin-slow opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+-                </svg>
+-                <!-- Küçük Çark -->
+-                <svg class="absolute w-10 h-10 text-cyan-400 animate-spin-slow-reverse transform translate-x-6 -translate-y-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+-                </svg>
+-            </div>
+-
+-            <!-- Başlık ve Açıklama -->
+-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-white">
+-                Şu Anda Bakımdayız
+-            </h2>
+-            <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
+-                Sizlere daha muazzam ve kesintisiz bir deneyim sunmak için sistemlerimizi güncelliyoruz. Çok yakında daha güçlü bir şekilde geri döneceğiz. Sabrınız için teşekkür ederiz.
+-            </p>
+-
+-            <!-- Durum Bildirgesi -->
+-            <div class="flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md mb-8">
+-                <span class="relative flex h-3 w-3">
+-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+-                </span>
+-                <span class="text-sm font-medium text-amber-200/90 tracking-wide uppercase">Sistem Güncelleniyor</span>
+-            </div>
+-
+-            <!-- İletişim Butonu -->
+-            <a href="mailto:iletisim@matota.com" class="group relative px-6 py-3 font-semibold text-white rounded-xl overflow-hidden bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300">
+-                <span class="relative z-10 flex items-center gap-2">
+-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+-                    Bize Ulaşın
+-                </span>
+-                <div class="absolute inset-0 h-full w-0 bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-300 ease-out group-hover:w-full z-0 opacity-50"></div>
+-            </a>
+-            
+-        </div>
+-
+-        <!-- Alt Bilgi (Footer) -->
+-        <p class="mt-8 text-slate-500 text-sm z-10">
+-            &copy; <script>document.write(new Date().getFullYear())</script> MATOTA. Tüm hakları saklıdır.
+-        </p>
+-    </div>
++  <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
++    <section class="rounded-xl border bg-white p-4">
++      <p class="text-sm text-slate-600">Panel Seçimi</p>
++      <div class="mt-3 flex gap-3">
++        <button id="studentTab" class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Öğrenci Paneli</button>
++        <button id="teacherTab" class="px-4 py-2 rounded-lg bg-slate-200 text-slate-700">Öğretmen Paneli</button>
++      </div>
++    </section>
++
++    <section id="studentPanel" class="space-y-5">
++      <h2 class="text-2xl font-bold">Öğrenci Paneli</h2>
++      <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DASHBOARD</h3><p id="studentDashboard" class="text-sm text-slate-600 mt-2">Yükleniyor...</p></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DERSLERİM</h3><ul id="studentLessons" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">SINAVLARIM</h3><ul id="studentExams" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖDEVLERİM</h3><ul id="studentHomeworks" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DOSYALARIM</h3><ul id="studentFiles" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border md:col-span-2"><h3 class="font-semibold">KISA VİDEOLAR</h3><ul id="studentVideos" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ANALİZLERİM</h3><ul id="studentAnalyses" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">MATEMATİK OYUNLARI</h3><ul id="studentGames" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++      </div>
++    </section>
++
++    <section id="teacherPanel" class="space-y-5 hidden">
++      <h2 class="text-2xl font-bold">Öğretmen Paneli</h2>
++      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DASHBOARD</h3><p id="teacherDashboard" class="text-sm text-slate-600 mt-2">Yükleniyor...</p></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖĞRENCİ TAKİBİ</h3><ul id="teacherTracking" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖĞRENCİ KAYIT</h3><p class="text-sm text-slate-600 mt-2">Supabase profiles tablosu ile kayıt yapılacak.</p></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DERS PLANLAMA</h3><ul id="teacherLessons" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">SINAV PLANLAMA</h3><ul id="teacherExams" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖDEV YÖNETİMİ</h3><ul id="teacherHomeworks" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DOSYA PAYLAŞIMI</h3><ul id="teacherFiles" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">MATEMATİK OYUNLARI</h3><ul id="teacherGames" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">VİDEO YÖNETİMİ</h3><ul id="teacherVideos" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">PUAN SİSTEMİ</h3><ul id="teacherPoints" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border md:col-span-2"><h3 class="font-semibold">ANALİZLERİM</h3><ul id="teacherAnalyses" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">GELİŞİM RAPORU</h3><p class="text-sm text-slate-600 mt-2">detailed_analyses tablosundan filtreli rapor üretilecek.</p></div>
++        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">MESAJLAR</h3><ul id="teacherMessages" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
++      </div>
++    </section>
++  </main>
++
++  <script type="module">
++    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
++
++    const SUPABASE_URL = 'https://tnhofdyonpbmozqzimzj.supabase.co';
++    const SUPABASE_ANON_KEY = 'sb_publishable_xVFfpA85IjnCqIjEJWvtvQ_VZCH_n60';
++
++    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
++
++    const el = (id) => document.getElementById(id);
++    const setList = (id, items, render) => {
++      const target = el(id);
++      target.innerHTML = '';
++      if (!items?.length) {
++        target.innerHTML = '<li>Veri bulunamadı</li>';
++        return;
++      }
++      items.forEach((item) => {
++        const li = document.createElement('li');
++        li.textContent = render(item);
++        target.appendChild(li);
++      });
++    };
++
++    function activate(tab) {
++      const isStudent = tab === 'student';
++      el('studentPanel').classList.toggle('hidden', !isStudent);
++      el('teacherPanel').classList.toggle('hidden', isStudent);
++      el('studentTab').className = `px-4 py-2 rounded-lg ${isStudent ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'}`;
++      el('teacherTab').className = `px-4 py-2 rounded-lg ${!isStudent ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'}`;
++    }
++
++    el('studentTab').addEventListener('click', () => activate('student'));
++    el('teacherTab').addEventListener('click', () => activate('teacher'));
++
++    async function fetchTable(table, queryBuilder) {
++      const q = queryBuilder(supabase.from(table));
++      const { data, error } = await q;
++      if (error) throw new Error(`${table}: ${error.message}`);
++      return data || [];
++    }
++
++    async function loadData() {
++      try {
++        const [lessons, exams, homeworks, files, videos, analyses, games, points, profiles, messages] = await Promise.all([
++          fetchTable('lessons', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('exams', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('homeworks', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('course_files', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('videos', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('detailed_analyses', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('games', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('points', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++          fetchTable('profiles', (q) => q.select('*').limit(5)),
++          fetchTable('contact_messages', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
++        ]);
++
++        el('dbStatus').textContent = 'Supabase bağlı';
++        el('dbStatus').className = 'text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-200';
++
++        el('studentDashboard').textContent = `Aktif ders: ${lessons.length} | Aktif sınav: ${exams.length} | Aktif ödev: ${homeworks.length}`;
++        el('teacherDashboard').textContent = `Öğrenci: ${profiles.length} | Son puan: ${points.length} kayıt`;
++
++        setList('studentLessons', lessons, (x) => x.name || x.title || 'İsimsiz ders');
++        setList('studentExams', exams, (x) => `${x.name || 'Sınav'}${x.exam_code ? ` (Kod: ${x.exam_code})` : ''}`);
++        setList('studentHomeworks', homeworks, (x) => x.title || 'İsimsiz ödev');
++        setList('studentFiles', files, (x) => x.name || x.file_name || 'Dosya');
++        setList('studentVideos', videos, (x) => x.title || x.name || 'Video');
++        setList('studentAnalyses', analyses, (x) => x.test_name || x.title || 'Analiz');
++        setList('studentGames', games, (x) => x.name || x.title || 'Oyun');
++
++        setList('teacherTracking', profiles, (x) => `${x.full_name || x.email || x.id} - Son modül: ${x.last_module || 'Yok'}`);
++        setList('teacherLessons', lessons, (x) => `${x.name || 'Ders'} - ${x.scheduled_at || x.date || 'Tarih yok'}`);
++        setList('teacherExams', exams, (x) => `${x.name || 'Sınav'} - Kod: ${x.exam_code || '—'}`);
++        setList('teacherHomeworks', homeworks, (x) => `${x.title || 'Ödev'} - ${x.due_date || 'Teslim tarihi yok'}`);
++        setList('teacherFiles', files, (x) => x.name || x.file_name || 'Dosya');
++        setList('teacherGames', games, (x) => x.name || x.title || 'Oyun');
++        setList('teacherVideos', videos, (x) => `${x.title || x.name || 'Video'} (${x.comment_count || 0} yorum)`);
++        setList('teacherPoints', points, (x) => `${x.category || 'Kategori'}: ${x.value || x.point || 0}`);
++        setList('teacherAnalyses', analyses, (x) => `${x.test_name || 'Test'} - ${x.score || 0} puan`);
++        setList('teacherMessages', messages, (x) => x.subject || x.name || 'Mesaj');
++      } catch (error) {
++        el('dbStatus').textContent = 'Supabase hatası';
++        el('dbStatus').className = 'text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-200';
++        el('studentDashboard').textContent = `Bağlantı hatası: ${error.message}`;
++      }
++    }
+ 
++    loadData();
++  </script>
+ </body>
+ </html>
+ 
+EOF
+)
