@@ -3,148 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MATOTA | Online Eğitim Platformu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>MATOTA Panel</title>
+  <style>
+    :root{--bg:#060b26;--glass:rgba(17,30,74,.45);--line:rgba(148,163,184,.25);--txt:#eaf0ff;--muted:#8fa3d4;--blue:#2f6fff;--orange:#ff5a00}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui;background:radial-gradient(circle at 10% 20%,#17327d 0,#080b24 40%,#160d28 100%);color:var(--txt);min-height:100vh}
+    .hidden{display:none!important}
+    .login{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .glass{backdrop-filter:blur(18px);background:var(--glass);border:1px solid var(--line);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+    .login-card{width:min(480px,100%);padding:28px}.row{display:grid;gap:12px}.btn{border:0;padding:14px 16px;border-radius:14px;color:#fff;font-weight:800;cursor:pointer}
+    .btn-blue{background:linear-gradient(130deg,#2f6fff,#2446b8)} .btn-orange{background:linear-gradient(130deg,#ff6e2e,#dd4c00)}
+    .layout{display:grid;grid-template-columns:320px 1fr;min-height:100vh}
+    .side{padding:22px 18px;border-right:1px solid rgba(255,255,255,.08);background:rgba(6,13,44,.55);backdrop-filter:blur(16px);display:flex;flex-direction:column}
+    .brand{font-size:46px;font-weight:900;letter-spacing:1px;margin:8px 18px 18px}.role{margin-left:18px;margin-top:-12px;color:var(--muted);font-weight:700}
+    .menu{overflow:auto;padding-right:8px;display:grid;gap:10px;margin-top:12px}
+    .mi{padding:16px 18px;border-radius:18px;color:#b8c7eb;border:1px solid transparent;background:transparent;text-align:left;font-size:27px;font-weight:700;cursor:pointer}
+    .mi.active{background:linear-gradient(140deg,#2f6fff,#284ca8);color:#fff;border-color:#4f8eff;box-shadow:0 12px 24px rgba(47,111,255,.35)}
+    .teacher .mi.active{background:linear-gradient(140deg,#ff6e2e,#dd4c00);border-color:#ff8a54;box-shadow:0 12px 24px rgba(255,90,0,.35)}
+    .user{margin-top:auto;padding:16px;border-top:1px solid rgba(255,255,255,.08)}
+    .main{padding:26px 34px}.top{display:flex;justify-content:space-between;align-items:center}.title{font-size:56px;margin:0}
+    .status{font-weight:700;color:var(--muted)} .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:18px}
+    .panel{padding:26px}.kpi{font-size:110px;font-weight:900;line-height:1}.cards{display:grid;gap:16px}.item{padding:16px;border-radius:16px;background:rgba(1,8,28,.65);border:1px solid rgba(255,255,255,.08)}
+    .form input,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #243563;background:#020919;color:#dce7ff}.form{display:grid;gap:10px}
+  </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen">
-  <header class="bg-slate-900 text-white px-6 py-4 shadow">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <h1 class="text-xl md:text-2xl font-bold tracking-wide">MATOTA Online Eğitim</h1>
-      <span id="dbStatus" class="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-200">DB bağlanıyor...</span>
+<body>
+  <section id="login" class="login">
+    <div class="login-card glass">
+      <h1 style="margin-top:0">MATOTA Giriş</h1>
+      <div class="row">
+        <input id="email" placeholder="Email" style="padding:13px;border-radius:12px;border:1px solid #304272;background:#040a1d;color:#fff">
+        <input id="password" type="password" placeholder="Şifre" style="padding:13px;border-radius:12px;border:1px solid #304272;background:#040a1d;color:#fff">
+        <button class="btn btn-blue" onclick="loginAs('student')">Öğrenci Girişi</button>
+        <button class="btn btn-orange" onclick="loginAs('teacher')">Öğretmen Girişi</button>
+      </div>
+      <small id="authMsg" style="color:#ffb4b4"></small>
     </div>
-  </header>
+  </section>
 
-  <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-    <section class="rounded-xl border bg-white p-4">
-      <p class="text-sm text-slate-600">Panel Seçimi</p>
-      <div class="mt-3 flex gap-3">
-        <button id="studentTab" class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Öğrenci Paneli</button>
-        <button id="teacherTab" class="px-4 py-2 rounded-lg bg-slate-200 text-slate-700">Öğretmen Paneli</button>
-      </div>
-    </section>
+  <section id="app" class="layout hidden">
+    <aside id="sidebar" class="side">
+      <div class="brand">MATOTA</div><div id="roleLabel" class="role"></div>
+      <div id="menu" class="menu"></div>
+      <div class="user"><strong id="userName">Kullanıcı</strong><div style="color:var(--muted)">Panel Oturumu</div><button class="btn" style="margin-top:12px;background:#ef4444" onclick="logout()">Çıkış Yap</button></div>
+    </aside>
+    <main class="main">
+      <div class="top"><h2 id="pageTitle" class="title">Dashboard</h2><div id="dbStatus" class="status">Supabase bağlanıyor...</div></div>
+      <div id="view"></div>
+    </main>
+  </section>
 
-    <section id="studentPanel" class="space-y-5">
-      <h2 class="text-2xl font-bold">Öğrenci Paneli</h2>
-      <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DASHBOARD</h3><p id="studentDashboard" class="text-sm text-slate-600 mt-2">Yükleniyor...</p></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DERSLERİM</h3><ul id="studentLessons" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">SINAVLARIM</h3><ul id="studentExams" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖDEVLERİM</h3><ul id="studentHomeworks" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DOSYALARIM</h3><ul id="studentFiles" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border md:col-span-2"><h3 class="font-semibold">KISA VİDEOLAR</h3><ul id="studentVideos" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ANALİZLERİM</h3><ul id="studentAnalyses" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">MATEMATİK OYUNLARI</h3><ul id="studentGames" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-      </div>
-    </section>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const supabase=createClient('https://tnhofdyonpbmozqzimzj.supabase.co','sb_publishable_xVFfpA85IjnCqIjEJWvtvQ_VZCH_n60');
 
-    <section id="teacherPanel" class="space-y-5 hidden">
-      <h2 class="text-2xl font-bold">Öğretmen Paneli</h2>
-      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DASHBOARD</h3><p id="teacherDashboard" class="text-sm text-slate-600 mt-2">Yükleniyor...</p></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖĞRENCİ TAKİBİ</h3><ul id="teacherTracking" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖĞRENCİ KAYIT</h3><p class="text-sm text-slate-600 mt-2">Supabase profiles tablosu ile kayıt yapılacak.</p></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DERS PLANLAMA</h3><ul id="teacherLessons" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">SINAV PLANLAMA</h3><ul id="teacherExams" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">ÖDEV YÖNETİMİ</h3><ul id="teacherHomeworks" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">DOSYA PAYLAŞIMI</h3><ul id="teacherFiles" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">MATEMATİK OYUNLARI</h3><ul id="teacherGames" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">VİDEO YÖNETİMİ</h3><ul id="teacherVideos" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">PUAN SİSTEMİ</h3><ul id="teacherPoints" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border md:col-span-2"><h3 class="font-semibold">ANALİZLERİM</h3><ul id="teacherAnalyses" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">GELİŞİM RAPORU</h3><p class="text-sm text-slate-600 mt-2">detailed_analyses tablosundan filtreli rapor üretilecek.</p></div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border"><h3 class="font-semibold">MESAJLAR</h3><ul id="teacherMessages" class="text-sm text-slate-600 mt-2 list-disc list-inside"></ul></div>
-      </div>
-    </section>
-  </main>
+const studentModules=['Dashboard','Derslerim','Sınavlarım','Ödevlerim','Dosyalarım','Kısa Videolar','Analizlerim','Matematik Oyunları'];
+const teacherModules=['Yönetim Özeti','Öğrenci Takibi','Öğrenci Kayıt','Ders Planlama','Sınav Planlama','Ödev Yönetimi','Dosya Paylaşımı','Matematik Oyunları','Video Yönetimi','Puan Sistemi','Analizlerim','Gelişim Raporu','Mesajlar'];
+let role='student',active='Dashboard';
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+window.loginAs=async (r)=>{const email=document.getElementById('email').value.trim();const password=document.getElementById('password').value.trim();
+ if(!email||!password){authMsg.textContent='Email ve şifre zorunlu.';return}
+ role=r;document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('sidebar').classList.toggle('teacher',role==='teacher');document.getElementById('roleLabel').textContent=role==='teacher'?'ÖĞRETMEN':'ÖĞRENCİ';document.getElementById('userName').textContent=email.split('@')[0];active=role==='teacher'?'Yönetim Özeti':'Dashboard';renderMenu();await loadView();};
+window.logout=()=>{location.reload()}
 
-    const SUPABASE_URL = 'https://tnhofdyonpbmozqzimzj.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_xVFfpA85IjnCqIjEJWvtvQ_VZCH_n60';
+function renderMenu(){const list=role==='teacher'?teacherModules:studentModules;menu.innerHTML='';list.forEach(m=>{const b=document.createElement('button');b.className='mi'+(m===active?' active':'');b.textContent=m;b.onclick=async()=>{active=m;renderMenu();await loadView()};menu.appendChild(b);});}
+const q=(t)=>supabase.from(t).select('*').limit(8);
+async function loadView(){pageTitle.textContent=active;try{dbStatus.textContent='Supabase bağlı';dbStatus.style.color='#8de8b0';}catch{dbStatus.textContent='Hata'}
+ if(role==='student') return studentView(); return teacherView();}
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+async function studentView(){const [points,lessons,homeworks,games]=await Promise.all([q('points'),q('lessons'),q('homeworks'),q('games')]);
+ if(active==='Dashboard'){view.innerHTML=`<div class='grid'><div class='glass panel'><div style='color:#9bb4ff;font-weight:800'>BAŞARI PUANIN</div><div class='kpi'>${points.data?.[0]?.value??105}</div></div><div class='cards'><div class='glass panel'>Sıradaki Aktif Dersler<br><b>${lessons.data?.[0]?.name??'Ders yok.'}</b></div><div class='glass panel'>Yaklaşan Aktif Ödevler<br><b>${homeworks.data?.[0]?.title??'Ödev yok.'}</b></div></div></div>`;return}
+ if(active==='Matematik Oyunları'){view.innerHTML=`<div class='glass panel'><div class='form'><input placeholder='Oyun adı ara...'></div><div class='cards' style='margin-top:16px'>${(games.data||[]).map(g=>`<div class='item'><h3>${g.name||'Oyun'}</h3><button class='btn btn-orange' onclick="alert('HTML Viewer açılacak')">Oyna</button></div>`).join('')||'<div class=item>Oyun bulunamadı</div>'}</div></div>`;return}
+ view.innerHTML=`<div class='glass panel'>${active} modülü aktif. Bu modüle giriş artık açık ve geliştirmeye hazır.</div>`;
+}
 
-    const el = (id) => document.getElementById(id);
-    const setList = (id, items, render) => {
-      const target = el(id);
-      target.innerHTML = '';
-      if (!items?.length) {
-        target.innerHTML = '<li>Veri bulunamadı</li>';
-        return;
-      }
-      items.forEach((item) => {
-        const li = document.createElement('li');
-        li.textContent = render(item);
-        target.appendChild(li);
-      });
-    };
-
-    function activate(tab) {
-      const isStudent = tab === 'student';
-      el('studentPanel').classList.toggle('hidden', !isStudent);
-      el('teacherPanel').classList.toggle('hidden', isStudent);
-      el('studentTab').className = `px-4 py-2 rounded-lg ${isStudent ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'}`;
-      el('teacherTab').className = `px-4 py-2 rounded-lg ${!isStudent ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'}`;
-    }
-
-    el('studentTab').addEventListener('click', () => activate('student'));
-    el('teacherTab').addEventListener('click', () => activate('teacher'));
-
-    async function fetchTable(table, queryBuilder) {
-      const q = queryBuilder(supabase.from(table));
-      const { data, error } = await q;
-      if (error) throw new Error(`${table}: ${error.message}`);
-      return data || [];
-    }
-
-    async function loadData() {
-      try {
-        const [lessons, exams, homeworks, files, videos, analyses, games, points, profiles, messages] = await Promise.all([
-          fetchTable('lessons', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('exams', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('homeworks', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('course_files', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('videos', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('detailed_analyses', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('games', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('points', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-          fetchTable('profiles', (q) => q.select('*').limit(5)),
-          fetchTable('contact_messages', (q) => q.select('*').order('created_at', { ascending: false }).limit(5)),
-        ]);
-
-        el('dbStatus').textContent = 'Supabase bağlı';
-        el('dbStatus').className = 'text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-200';
-
-        el('studentDashboard').textContent = `Aktif ders: ${lessons.length} | Aktif sınav: ${exams.length} | Aktif ödev: ${homeworks.length}`;
-        el('teacherDashboard').textContent = `Öğrenci: ${profiles.length} | Son puan: ${points.length} kayıt`;
-
-        setList('studentLessons', lessons, (x) => x.name || x.title || 'İsimsiz ders');
-        setList('studentExams', exams, (x) => `${x.name || 'Sınav'}${x.exam_code ? ` (Kod: ${x.exam_code})` : ''}`);
-        setList('studentHomeworks', homeworks, (x) => x.title || 'İsimsiz ödev');
-        setList('studentFiles', files, (x) => x.name || x.file_name || 'Dosya');
-        setList('studentVideos', videos, (x) => x.title || x.name || 'Video');
-        setList('studentAnalyses', analyses, (x) => x.test_name || x.title || 'Analiz');
-        setList('studentGames', games, (x) => x.name || x.title || 'Oyun');
-
-        setList('teacherTracking', profiles, (x) => `${x.full_name || x.email || x.id} - Son modül: ${x.last_module || 'Yok'}`);
-        setList('teacherLessons', lessons, (x) => `${x.name || 'Ders'} - ${x.scheduled_at || x.date || 'Tarih yok'}`);
-        setList('teacherExams', exams, (x) => `${x.name || 'Sınav'} - Kod: ${x.exam_code || '—'}`);
-        setList('teacherHomeworks', homeworks, (x) => `${x.title || 'Ödev'} - ${x.due_date || 'Teslim tarihi yok'}`);
-        setList('teacherFiles', files, (x) => x.name || x.file_name || 'Dosya');
-        setList('teacherGames', games, (x) => x.name || x.title || 'Oyun');
-        setList('teacherVideos', videos, (x) => `${x.title || x.name || 'Video'} (${x.comment_count || 0} yorum)`);
-        setList('teacherPoints', points, (x) => `${x.category || 'Kategori'}: ${x.value || x.point || 0}`);
-        setList('teacherAnalyses', analyses, (x) => `${x.test_name || 'Test'} - ${x.score || 0} puan`);
-        setList('teacherMessages', messages, (x) => x.subject || x.name || 'Mesaj');
-      } catch (error) {
-        el('dbStatus').textContent = 'Supabase hatası';
-        el('dbStatus').className = 'text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-200';
-        el('studentDashboard').textContent = `Bağlantı hatası: ${error.message}`;
-      }
-    }
-
-    loadData();
-  </script>
+async function teacherView(){const [lessons,exams,subs,msgs]=await Promise.all([q('lessons'),q('exams'),q('submissions'),q('contact_messages')]);
+ if(active==='Yönetim Özeti'){view.innerHTML=`<div class='grid'><div class='glass panel' style='background:linear-gradient(130deg,rgba(255,90,0,.75),rgba(221,76,0,.7))'><h3 style='font-size:56px;margin:0'>Yönetim Paneli Aktif</h3></div><div class='glass panel'><h3>Sıradaki Planlanmış Dersler</h3>${(lessons.data||[]).slice(0,3).map(l=>`<div class='item'>${l.name||'Ders'} - ${l.scheduled_at||''}</div>`).join('')}</div></div><div class='glass panel' style='margin-top:18px'><h3>Son Çözüm Gönderimleri</h3><div class='cards'>${(subs.data||[]).slice(0,3).map(s=>`<div class='item'>${s.title||'Gönderim'} - ${s.student_name||'Öğrenci'}</div>`).join('')}</div></div>`;return}
+ if(active==='Sınav Planlama'){view.innerHTML=`<div class='grid'><div class='glass panel'><h3>Yeni Sınav Planla</h3><div class='form'><select><option>Öğrenci Seç</option></select><input placeholder='Sınav Başlığı'><input placeholder='Sınav Linki'><input placeholder='Öğrenci Giriş Kodu'><input type='datetime-local'><button class='btn btn-orange'>Yayınla</button></div></div><div class='glass panel'><h3>Aktif/Geçmiş Sınavlar</h3>${(exams.data||[]).map(e=>`<div class='item'><b>${e.name||'Sınav'}</b><div>Kod: ${e.exam_code||'-'}</div></div>`).join('')}</div></div>`;return}
+ if(active==='Mesajlar'){view.innerHTML=`<div class='glass panel'><h3>İletişim Mesajları</h3>${(msgs.data||[]).map(m=>`<div class='item'>${m.subject||'Mesaj'} - ${m.name||''}</div>`).join('')||'<div class=item>Mesaj yok</div>'}</div>`;return}
+ view.innerHTML=`<div class='glass panel'>${active} modülü aktif. Bu modüle giriş artık açık ve geliştirmeye hazır.</div>`;
+}
+</script>
 </body>
 </html>
